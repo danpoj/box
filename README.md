@@ -1,6 +1,4 @@
-# react-book
-
-[react.dev docs](https://react.dev) 개념들 정리
+# [react.dev docs](https://react.dev) 개념들 정리
 
 ## `export default () => {}`
 
@@ -311,4 +309,4 @@ function handleToggleYourList(artworkId, nextSeen) {
 - **Testing**: A reducer is a pure function that doesn’t depend on your component. This means that you can export and test it separately in isolation. While generally it’s best to test components in a more realistic environment, for complex state update logic it can be useful to assert that your reducer returns a particular state for a particular initial state and action.
 - **Personal preference**: Some people like reducers, others don’t. That’s okay. It’s a matter of preference. You can always convert between useState and useReducer back and forth: they are equivalent!
 
-> reducers must be pure. reducer또한 `Immer`를 통해 쉽게 관리 가능하다.
+> reducers must be pure and immutable. reducer또한 `Immer`를 통해 쉽게 관리 가능하다.
