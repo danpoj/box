@@ -1,5 +1,3 @@
-# [react.dev docs](https://react.dev) 개념들 정리
-
 ## `export default () => {}`
 
 - 함수 이름없이 내보내면 디버깅 힘드니까 하지말자. 물론 이렇게 쓰는사람은 없겠지만...
@@ -310,3 +308,7 @@ function handleToggleYourList(artworkId, nextSeen) {
 - **Personal preference**: Some people like reducers, others don’t. That’s okay. It’s a matter of preference. You can always convert between useState and useReducer back and forth: they are equivalent!
 
 > reducers must be pure and immutable. reducer또한 `Immer`를 통해 쉽게 관리 가능하다.
+
+## Reference
+
+- [react.dev docs](https://react.dev)

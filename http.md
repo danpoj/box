@@ -26,3 +26,7 @@
 - intermediate program or computer used when navigation through diffrent networks of the Internet.
 - interceps requests and serves back responses.
 - 캐싱, 필터링, 로드밸런싱, 인증, 로깅, 보안, 우회등 다영햔 역할을 한다. 나중에 공부하자...
+
+## Reference
+
+- [mdn web docs / http](https://developer.mozilla.org/ko/docs/Web/HTTP)
