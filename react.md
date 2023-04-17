@@ -309,6 +309,34 @@ function handleToggleYourList(artworkId, nextSeen) {
 
 > reducers must be pure and immutable. reducer또한 `Immer`를 통해 쉽게 관리 가능하다.
 
+## fetch / axios / react-query
+
+|            | fetch | axios | react query |
+| ---------- | ----- | ----- | ----------- |
+| syntax     | 💩    | 👍    | 👍          |
+| loading    | 💩    | 💩    | 👍          |
+| success    | 💩    | 💩    | 👍          |
+| error      | 💩    | 💩    | 👍          |
+| stale data | 💩    | 💩    | 👍          |
+| caching    | 💩    | 💩    | 👍          |
+
+- axios: body를 `JSON`으로 보내 줄 필요가 없고, `response.json()`으로 한번 더 받아올 필요가 없는 등 `fetch`에 비해 간단한 syntax를 제공한다.
+
+### react query
+
+- fetching library for fetch and maintain state easier.
+- useState와 contextAPI만으로 대부분의 client state를 다룰 수 있다.
+- 하지만 구조가 복잡해지면 위의 native API들로는 state를 다루는데 한계가 발생할 수 있어, redux, mobx, recoil, jotai같은 상태관리 라이브러리들이 등장했다. 이러한 라이브러리들은 client state를 다루는 데엔 좋지만, `async or server state`를 다루기 어렵다.
+
+### 그래서 react query를 왜 쓰는데?
+
+> it makes fetching, caching, synchronizing and updating server state in your web applications a breeze. [tanstack query overview](https://tanstack.com/query/v4/docs/react/overview)
+
+1. 데이터의 변경이 있는 경우에만 리렌더링을 유발한다.
+2. 이미 받아온 데이터면 다른 페이지라도 그 상태를 확인하고 재호출을 방지해준다. 즉, 캐싱 처리에 관한 편한 인터페이스를 제공한다. (deduping multiple requests for the same data into a single request.)
+3. 데이터를 다시 불러올때, 응답이 오기 전까지 이전 stale data로 화면을 표시해준다.
+4. 요약하자면 client state와 server state를 최대한 일치시켜주고 fetch logic을 추상화하여 사용하기 쉬운 인터페이스를 제공해준다. (knowing when data is _out of data_ and updating _out of data_ in the background.)
+
 ## Reference
 
 - [react.dev docs](https://react.dev)

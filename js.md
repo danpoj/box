@@ -30,7 +30,6 @@ const result = postUser({
 ## 나중에 정리할 것
 
 - 옵저버 패턴
-- 깊은복사 얕은복사
 
 ## Reference
 
