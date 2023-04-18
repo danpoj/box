@@ -33,7 +33,7 @@ const result = postUser({
 - javascript engine은 싱글 스레드이다. 즉, 하나의 call stack을 가지고있다. 근데 어떻게 비동기적으로 동작할수있을까?
 - javascript engine은 memory heap과 call stack으로 구성된다. 그리고 엔진 밖에서 자바스크립트 실행에 관여하는 요소인 web API와 task Queue가 존재한다.
 - DOM event, Ajax, setTimeout등의 비동기 작업들은 cll stack에서 순차적으로 실행되지않고 background로 작업을 넘기게된다.
-- background에서 비동기 작업이 완료되면 task Queue(microtask Queue, callback Queue)에 순차적으로 핸들러가 쌓이게 되고, 자바스크립트 런타임 내내 동작하는 이벤트 루프에 의해 call stack에 작업이 없는 시점에 task queue에 쌓인 작업들을 하나씩 call stack에 올려 실행시켜준다.
+- background에서 비동기 작업이 완료되면 task Queue(microtask Queue + 매크로task Queue)에 순차적으로 핸들러가 쌓이게 되고, 자바스크립트 런타임 내내 동작하는 이벤트 루프에 의해 call stack에 작업이 없는 시점에 task queue에 쌓인 작업들을 하나씩 call stack에 올려 실행시켜준다.
 
 - [event loop visualizer website](http://latentflip.com/loupe/?code=JC5vbignYnV0dG9uJywgJ2NsaWNrJywgZnVuY3Rpb24gb25DbGljaygpIHsKICAgIHNldFRpbWVvdXQoZnVuY3Rpb24gdGltZXIoKSB7CiAgICAgICAgY29uc29sZS5sb2coJ1lvdSBjbGlja2VkIHRoZSBidXR0b24hJyk7ICAgIAogICAgfSwgMjAwMCk7Cn0pOwoKY29uc29sZS5sb2coIkhpISIpOwoKc2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coIkNsaWNrIHRoZSBidXR0b24hIik7Cn0sIDUwMDApOwoKY29uc29sZS5sb2coIldlbGNvbWUgdG8gbG91cGUuIik7!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D)
 
@@ -63,6 +63,10 @@ console.log(counter()) // 2
 ```
 
 ## promise
+
+- 결과값을 나중에 원하는 시점에 꺼내쓸 수 있는 유연함이 있다.
+- 코드를 분리 할 수 있다는 장점.
+- ⚠️ callback은 결과값을 바로 받아야 한다는 단점이 있다. 유연하지않음.
 
 ```js
 let promise = new Promise((resolve, reject) => {
@@ -108,8 +112,54 @@ new Promise((resolve, reject) => {
 - `Promise.allSettled`: promise들을 배열 형태로 받아 resolve된 경우 `{status: fullfilled, value: result}` reject된 경우 `{status: rejected, reason: error}`가 반환되며, 응답에 성공한 promise와 실패한 promise를 다르게 처리 가능하다.
 - `Promise.race`: 가장 먼저 처리된 promise의 결과(resolve or reject)만 반환한다.
 - async로 감싸진 함수는 Promise를 반환한다.
+- await를 남용하지말자. 여러 데이터를 서버에서 받아오는 경우, 데이터 간의 연관 관계가 없다면 `Promise.all`로 묶어서 동시에 처리하자.
 
 [js info - promise](https://ko.javascript.info/promise-error-handling)
+
+## this
+
+- ✅ **this는 함수가 호출될 때 결정된다.**
+- ✅ **화살표 함수는 부모 함수의 this를 물려받는다.**
+- `call apply bind`로 this를 바꿀 수 있다.
+
+```js
+const obj = {
+  name: 'danpoj',
+  sayName() {
+    console.log(this.name) // 함수를 어떻게 호출했는지 보자. obj.sayName()으로 호출했으므로 this는 obj를 가리킨다.
+    function inner() {
+      console.log(this.name) // 이것또한 함수를 호출했을때를 보자. inner()로 호출했으므로 this는 window를 가리킨다.
+    }
+    inner()
+  },
+}
+
+obj.sayName()
+// danpoj
+// undefined (inner에서의 window.name)
+```
+
+```js
+const obj = {
+  name: 'danpoj',
+  sayName() {
+    console.log(this.name) // 함수를 어떻게 호출했는지 보자. obj.sayName()으로 호출했으므로 this는 obj를 가리킨다.
+    const inner = () => {
+      console.log(this.name) // 함수 정의부만 봐서는 뭐를 호출할지 모른다.
+      // 화살표함수는 부모 함수의 this를 물려받는다.
+      // 부모 함수는 sayName이고 sayName의 this는 뭘까?
+      // this가 가리키는것을 알고싶으면 함수의 호출 부분을 봐야한다!!
+      // obj.sayName()으로 sayName 함수를 호출했으므로 this는 obj이다.
+      // inner 화살표함수는 sayName의 this를 물려받으므로 inner의 this는 똑같이 obj가 되는 것이다.
+    }
+    inner()
+  },
+}
+
+obj.sayName()
+// danpoj
+// danpoj
+```
 
 ## 나중에 정리할 것
 
