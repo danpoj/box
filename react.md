@@ -337,6 +337,117 @@ function handleToggleYourList(artworkId, nextSeen) {
 3. 데이터를 다시 불러올때, 응답이 오기 전까지 이전 stale data로 화면을 표시해준다.
 4. 요약하자면 client state와 server state를 최대한 일치시켜주고 fetch logic을 추상화하여 사용하기 쉬운 인터페이스를 제공해준다. (knowing when data is _out of data_ and updating _out of data_ in the background.)
 
+## `<script>` CDN
+
+> 실무에서는 webpack 같은 툴로 관리하기 때문에 `<script>` CDN을 직접 쓰진 않는다
+
+```html
+<!-- development -->
+<script
+  crossorigin
+  src="https://unpkg.com/react@18/umd/react.development.js"
+></script>
+<script
+  crossorigin
+  src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+></script>
+```
+
+위의 코드는 개발용으로 적합하며 배포용 버전에는 적합하지 않다  
+React의 용량 및 성능 최적화된 배포용 버전은 아래와 같이 제공되고 있다
+
+```html
+<!-- production -->
+<script
+  src="https://unpkg.com/react@18/umd/react.production.min.js"
+  crossorigin
+></script>
+<script
+  src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+  crossorigin
+></script>
+```
+
+## 컴포넌트
+
+> 컴포넌트란? 데이터와 화면을 하나로 묶은 덩어리  
+> 데이터가 바뀌면 화면도 따라 바뀐다
+
+1. **함수 컴포넌트** • 요새는 대부분의 경우 함수로 작성
+2. **클래스 컴포넌트** • 옛날 코드 || `ErrorBoundary`
+
+## JSX
+
+React에서 렌더링을 위해선 아래와 같이 해야한다
+
+```js
+return React.createElement(
+  'button',
+  { onClick: () => setCount(count + 1) },
+  'plus'
+)
+```
+
+하지만 복잡하고 읽기 힘들기 때문에 React에선 JSX를 사용한다
+위와 동일한 코드이다
+
+```js
+return <button onClick={() => setCount(count + 1)}>plus</button>
+```
+
+위와 같이 JSX를 사용하면 브라우저에서 JSX문법을 해석하지 못해 에러가 발생한다
+이를 해결하기위해 JSX는 항상 Babel과 같이 사용해야한다
+
+## React **V17**, **V18**
+
+```js
+// 17버전 index.js
+ReactDOM.render(<App />, document.querySelector('#root'))
+
+// 18버전 index.js
+ReactDOM.createRoot(document.querySelector('#root')).render(<App />)
+```
+
+## controlled / uncontrolled form input
+
+```js
+// controlled input
+<input  value={value} onChange={onChange} type='text'  />
+
+// uncontrolled input
+<input ref={inputRef} type='text' />
+```
+
+`form` `submit` 할 때만 `input` 값이 필요한 경우 **uncontrolled input**  
+대부분의 경우는 **controlled input**을 쓴다  
+**uncontrolled input** 에 기본 값을 주고싶은 경우 `defaultValue`를 써야한다  
+`value`를 쓰게되면 controlled로 간주된다
+
+[goshacmd controlled vs uncontrolled input](https://goshacmd.com/controlled-vs-uncontrolled-inputs-react/) 참고
+
+## 컴포넌트 리랜더링 조건
+
+1. state가 바뀌었을 때
+2. props가 바뀌었을 때
+3. 부모 컴포넌트가 리랜더링 될 때
+
+> 부모 컴포넌트의 리랜더링에 의해 자식 컴포넌트가 불필요한 리랜더링이 발생한다면 자식 컴포넌트를 `memo`로 감싸주자  
+> `memo`로 감싸진 자식 컴포넌트는 1,2 번에 의해서만 리랜더링 되고 3번은 막아준다
+
+> react dev tools의 컴포넌트 창을 보면, `memo`로 감싸진 자식 컴포넌트의 이름이 **Anonymous**로 표시된다
+> `memo`를 사용할 땐 아래 처럼 `displayName`을 같이 설정해주자
+
+```js
+Test.displayName = 'Test'
+```
+
+**참고** class 컴포넌트에선 `memo` 대신 `pureComponent`, `shouldComponentUpdate`
+
+## props 값 변경
+
+부모 컴포넌트로부터 받은 props를 자식 컴포넌트에서 수정하면 안되지만,  
+필요한 경우 props를 `useState`의 초기값으로 설정하여 `setState`를 통해 바꿔줘야한다
+
 ## Reference
 
 - [react.dev docs](https://react.dev)
