@@ -28,9 +28,9 @@
 - react Profiler로 어떤 컴포넌트가 memoization의 장점을 취할 수 있을 지 확인해보자.
 
 ```js
-console.time('filter array')
-const visibleTodos = filterTodos(todos, tab)
-console.timeEnd('filter array')
+console.time("filter array");
+const visibleTodos = filterTodos(todos, tab);
+console.timeEnd("filter array");
 
 // 1ms 를 기준으로 useMemo를 사용할지 정하는 걸 권장한다.
 // development 환경에선 정확한 결과를 얻기힘들 수 있다. (ex. <StrictMode>)
@@ -40,17 +40,17 @@ console.timeEnd('filter array')
 ```js
 function ProductPage({ productId, referrer, theme }) {
   const handleSubmit = (orderDetails) => {
-    post('/product/' + productId + '/buy', {
+    post("/product/" + productId + "/buy", {
       referrer,
       orderDetails,
-    })
-  }
+    });
+  };
 
   return (
     <div className={theme}>
       <ShippingForm onSubmit={handleSubmit} />
     </div>
-  )
+  );
 }
 
 // 1. theme 값이 바뀌어 ProductPage가 리렌더되면, 자식인 ShippingForm도 리렌더링이 발생한다.
@@ -98,15 +98,15 @@ function ProductPage({ productId, referrer, theme }) {
 
 ```js
 function outerFunc() {
-  var x = 10
+  var x = 10;
   var innerFunc = function () {
-    console.log(x)
-  }
-  return innerFunc
+    console.log(x);
+  };
+  return innerFunc;
 }
 
-var inner = outerFunc()
-inner() // 10
+var inner = outerFunc();
+inner(); // 10
 ```
 
 1. outerFunc는 실행 컨텍스로 콜스택에 올라가게되고 innerFunc를 반환하며 outerFunc의 실행 컨텍스트는 콜스택에서 pop되어 사라진다.
@@ -148,7 +148,7 @@ inner() // 10
 
 ### Date객체의 현재 시간은 실제 시간과 차이가 있을 수 있다?
 
-### 면접 질문들!
+### 면접 질문들
 
 https://zero-base.co.kr/event/media_insight_contents_FE_frontend_tech_Interview?gclid=CjwKCAjw3POhBhBQEiwAqTCuBrkdrbP1IKyimKUkQkBwtY5q_oVkqGg2quSPIddswt2LMxZIt053DRoCGiMQAvD_BwE
 
