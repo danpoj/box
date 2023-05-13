@@ -33,9 +33,9 @@
 function Item({ name, isPacked }) {
   return (
     <li className='item'>
-      {name} {isPacked && '✔'}
+      {name} {isPacked && "✔"}
     </li>
-  )
+  );
 }
 ```
 
@@ -66,13 +66,13 @@ export default function App() {
     <div
       className='Toolbar'
       onClick={() => {
-        alert('You clicked on the toolbar!')
+        alert("You clicked on the toolbar!");
       }}
     >
-      <button onClick={() => alert('Playing!')}>Play Movie</button>
-      <button onClick={() => alert('Uploading!')}>Upload Image</button>
+      <button onClick={() => alert("Playing!")}>Play Movie</button>
+      <button onClick={() => alert("Uploading!")}>Upload Image</button>
     </div>
-  )
+  );
 }
 ```
 
@@ -104,45 +104,45 @@ export default function App() {
 [react hooks not magic just arrays](https://medium.com/@ryardley/react-hooks-not-magic-just-arrays-cd4f1857236e)
 
 ```js
-let componentHooks = []
-let currentHookIndex = 0
+let componentHooks = [];
+let currentHookIndex = 0;
 
 // How useState works inside React (simplified).
 function useState(initialState) {
-  let pair = componentHooks[currentHookIndex]
+  let pair = componentHooks[currentHookIndex];
   if (pair) {
     // This is not the first render,
     // so the state pair already exists.
     // Return it and prepare for next Hook call.
-    currentHookIndex++
-    return pair
+    currentHookIndex++;
+    return pair;
   }
 
   // This is the first time we're rendering,
   // so create a state pair and store it.
-  pair = [initialState, setState]
+  pair = [initialState, setState];
 
   function setState(nextState) {
     // When the user requests a state change,
     // put the new value into the pair.
-    pair[0] = nextState
-    updateDOM()
+    pair[0] = nextState;
+    updateDOM();
   }
 
   // Store the pair for future renders
   // and prepare for the next Hook call.
-  componentHooks[currentHookIndex] = pair
-  currentHookIndex++
-  return pair
+  componentHooks[currentHookIndex] = pair;
+  currentHookIndex++;
+  return pair;
 }
 ```
 
 ```js
-const [number, setNumber] = useState(0)
+const [number, setNumber] = useState(0);
 
-setNumber(number + 5) // adds "replace with 5" to its queue
-setNumber((n) => n + 1) // adds "n => n+1" function to its queue
-setNumber(42) // adds "replace with 42" to its queue
+setNumber(number + 5); // adds "replace with 5" to its queue
+setNumber((n) => n + 1); // adds "n => n+1" function to its queue
+setNumber(42); // adds "replace with 42" to its queue
 
 // result: 42
 ```
@@ -164,20 +164,20 @@ setNumber(42) // adds "replace with 42" to its queue
 - 또한 새로운 값으로 대체해줘야한다.
 
 ```js
-import { useState } from 'react'
+import { useState } from "react";
 
 export default function App() {
   const [user, setUser] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-  })
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
 
   function handleInput(e) {
     setUser({
       ...user,
       [e.target.name]: e.target.value,
-    })
+    });
   }
 
   return (
@@ -195,7 +195,7 @@ export default function App() {
         <input name='email' value={user.email} onChange={handleInput} />
       </label>
     </>
-  )
+  );
 }
 ```
 
@@ -206,13 +206,13 @@ export default function App() {
 ```js
 const [person, setPerson] = useState({
   name: {
-    firstName: '',
-    lastName: '',
+    firstName: "",
+    lastName: "",
   },
-  email: '',
-  city: '',
+  email: "",
+  city: "",
   age: 0,
-})
+});
 ```
 
 - solution 1: `spread`
@@ -225,7 +225,7 @@ function onLastNameChange(e) {
       ...person.name,
       lastName: e.target.value,
     },
-  })
+  });
 }
 ```
 
@@ -233,22 +233,22 @@ function onLastNameChange(e) {
 - The `draft` provided by Immer is a special type of object, called a [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy), that “records” what you do with it.
 
 ```js
-import { useImmer } from 'use-immer'
+import { useImmer } from "use-immer";
 
 const [person, setPerson] = useImmer({
   name: {
-    firstName: '',
-    lastName: '',
+    firstName: "",
+    lastName: "",
   },
-  email: '',
-  city: '',
+  email: "",
+  city: "",
   age: 0,
-})
+});
 
 function onLastNameChange(e) {
   setPerson((draft) => {
-    draft.name.lastName = e.target.value
-  })
+    draft.name.lastName = e.target.value;
+  });
 }
 ```
 
@@ -257,26 +257,26 @@ function onLastNameChange(e) {
 
 ```js
 const initialList = [
-  { id: 0, title: 'Big Bellies', seen: false },
-  { id: 1, title: 'Lunar Landscape', seen: false },
-  { id: 2, title: 'Terracotta Army', seen: true },
-]
+  { id: 0, title: "Big Bellies", seen: false },
+  { id: 1, title: "Lunar Landscape", seen: false },
+  { id: 2, title: "Terracotta Army", seen: true },
+];
 
-const [myList, updateMyList] = useImmer(initialList)
-const [yourList, updateYourList] = useImmer(initialList)
+const [myList, updateMyList] = useImmer(initialList);
+const [yourList, updateYourList] = useImmer(initialList);
 
 function handleToggleMyList(id, nextSeen) {
   updateMyList((draft) => {
-    const artwork = draft.find((a) => a.id === id)
-    artwork.seen = nextSeen
-  })
+    const artwork = draft.find((a) => a.id === id);
+    artwork.seen = nextSeen;
+  });
 }
 
 function handleToggleYourList(artworkId, nextSeen) {
   updateYourList((draft) => {
-    const artwork = draft.find((a) => a.id === artworkId)
-    artwork.seen = nextSeen
-  })
+    const artwork = draft.find((a) => a.id === artworkId);
+    artwork.seen = nextSeen;
+  });
 }
 ```
 
@@ -382,17 +382,17 @@ React에서 렌더링을 위해선 아래와 같이 해야한다
 
 ```js
 return React.createElement(
-  'button',
+  "button",
   { onClick: () => setCount(count + 1) },
-  'plus'
-)
+  "plus"
+);
 ```
 
 하지만 복잡하고 읽기 힘들기 때문에 React에선 JSX를 사용한다
 위와 동일한 코드이다
 
 ```js
-return <button onClick={() => setCount(count + 1)}>plus</button>
+return <button onClick={() => setCount(count + 1)}>plus</button>;
 ```
 
 위와 같이 JSX를 사용하면 브라우저에서 JSX문법을 해석하지 못해 에러가 발생한다
@@ -402,10 +402,10 @@ return <button onClick={() => setCount(count + 1)}>plus</button>
 
 ```js
 // 17버전 index.js
-ReactDOM.render(<App />, document.querySelector('#root'))
+ReactDOM.render(<App />, document.querySelector("#root"));
 
 // 18버전 index.js
-ReactDOM.createRoot(document.querySelector('#root')).render(<App />)
+ReactDOM.createRoot(document.querySelector("#root")).render(<App />);
 ```
 
 ## controlled / uncontrolled form input
@@ -438,7 +438,7 @@ ReactDOM.createRoot(document.querySelector('#root')).render(<App />)
 > `memo`를 사용할 땐 아래 처럼 `displayName`을 같이 설정해주자
 
 ```js
-Test.displayName = 'Test'
+Test.displayName = "Test";
 ```
 
 **참고** class 컴포넌트에선 `memo` 대신 `pureComponent`, `shouldComponentUpdate`
@@ -447,6 +447,58 @@ Test.displayName = 'Test'
 
 부모 컴포넌트로부터 받은 props를 자식 컴포넌트에서 수정하면 안되지만,  
 필요한 경우 props를 `useState`의 초기값으로 설정하여 `setState`를 통해 바꿔줘야한다
+
+## virtual DOM
+
+- SPA는 DOM 조작이 자주 발생한다.
+- DOM 구조가 바뀔 떄 마다 화면을 그려주게 되면 연산이 너무 많아진다.
+- 따라서 React는 수많은 렌더링된 결과를 Virtual DOM에 먼저 적용하고 그 최종 결과를 한번에 실제 DOM에 그려준다.
+- 그렇다면 Virtual DOM이 퍼포먼스에 큰 영향을 줄까?
+- 아니다. 실제로 본인의 앱 구조에 맞게 최적화 작업을 **제대로** 했을 경우가 제일 빠를 것이다.
+- 하지만 그 작업이 복잡하고 힘들기 때문에 Virtual DOM을 통해 최적화 작업을 어느정도 자동으로 해줘 생산성을 폭발적으로 높여준다.
+- React의 Virtual DOM을 사용한다고 성능이 훨씬 좋은것이 **절대** 아니다. React안에서도 최적화 작업을 잘 해줘야한다!
+
+## 렌더링 최적화 (useMemo, useCallback, memo, 리렌더링조건)
+
+- useMemo: 리턴값을 캐싱(memoization)해두어 리렌더가 일어나도 재연산이 일어나지않는다. 오직 최적화만을 위해서만 사용해야한다.
+- useCallback: 함수를 캐싱한다.
+
+- 인터랙션에 의해 전체 페이지를 변경하는 그런 경우에는 당연히 useMemo가 그다지 필요없을 것이다.
+- 그림을 그리는 것과 같이 렌더링이 많이 일어나는 경우 최적화에 큰 영향을 준다.
+- react Profiler로 어떤 컴포넌트가 memoization의 장점을 취할 수 있을 지 확인해보자.
+
+```js
+console.time("filter array");
+const visibleTodos = filterTodos(todos, tab);
+console.timeEnd("filter array");
+
+// 1ms 를 기준으로 useMemo를 사용할지 정하는 걸 권장한다.
+// development 환경에선 정확한 결과를 얻기힘들 수 있다. (ex. <StrictMode>)
+// production으로 배포한 후, 성능이 다소 좋지 않은 디바이스로 테스트 해보자.
+```
+
+```js
+function ProductPage({ productId, referrer, theme }) {
+  const handleSubmit = (orderDetails) => {
+    post("/product/" + productId + "/buy", {
+      referrer,
+      orderDetails,
+    });
+  };
+
+  return (
+    <div className={theme}>
+      <ShippingForm onSubmit={handleSubmit} />
+    </div>
+  );
+}
+
+// 1. theme 값이 바뀌어 ProductPage가 리렌더되면, 자식인 ShippingForm도 리렌더링이 발생한다.
+// 2. 만약 ShippingForm 컴포넌트를 그리는데 오랜 시간이 걸리는 컴포넌트라면?
+// 3. ShippingForm 컴포넌트는 theme값과 관계가 없으므로 리렌더링이 필요없다.
+// 4. ShippingForm 컴포넌트를 memo로 감싼다. (memo는 props가 바뀌지 않으면 리렌더링을 발생시키지않는다.)
+// 5. handleSubmit 함수는 렌더링이 될때마다 새로운 함수를 생성하므로 useCallback으로 캐싱해두자.
+```
 
 ## Reference
 
